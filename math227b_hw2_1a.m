@@ -8,15 +8,18 @@ input2=[1 -2 3 -4 5 -6 7]; % this is y.
 div_diff(input1,input2)
 function a_values = div_diff(x,y)
     mat=size(x); % get size of input
-    n=max(mat); %get max size of input regardless of dimension
-    f_x = zeros(n, n); %placeholder zeros matrix
-    f_x(:,1) = y'; %the first column of f_x will be the transpose of y 
-    %because zeroth divided difference is f[xi]=f(xi)
-    for j = 2 : n
-        for i = 1 : (n - j + 1)
-            f_x(i,j) = (f_x(i + 1, j - 1) - f_x(i, j - 1)) / (x(i + j - 1) - x(i));
+    n=max(mat); %get max size of input
+    function div_diff = recur(nums,y_in,x_in)
+        if length(nums)==1
+            div_diff=y_in(nums(1));
+        else
+            div_diff=(recur(nums(2:end),y_in,x_in)-recur(nums(1:end-1),y_in,x_in))/((x_in(nums(end)))-x_in(nums(1)));
         end
     end
-    V = f_x(1,:); % first row only
-    a_values=V ;% flip so it is in the order of a0 1st to an last
+    a_vals=zeros(1,n);
+    for i=1:n
+        list=1:i;
+        a_vals(i)=recur(list,y,x);
+    end
+    a_values=a_vals;
 end
