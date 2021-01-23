@@ -6,7 +6,7 @@ syms x ;
 a=0. ;%min
 b=2.*pi ;%max
 
-n=6 ;%number of values to test
+n=3 ;%number of values to test
 func_actual= sin(x); %actual function
 x_input=linspace(a,b,n);
 y_input=zeros(size(x_input)); %placeholder
@@ -24,7 +24,7 @@ fplot(func_actual, [minx maxx]) %plot the real polynomial
 xlim([minx maxx]);
 title('Problem part D1, Lagrange polynomial interpolation versus actual function')
 hold off;
-
+legend('Lagrange polynomial interpolation function','Training data points','Real function')
 %calculate error
 poly_difs =func_actual-func;
 num=300;

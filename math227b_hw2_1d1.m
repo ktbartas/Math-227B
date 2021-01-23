@@ -6,7 +6,7 @@ syms x ;
 a=-1. ;%min
 b=1. ;%max
 
-n=3 ;%number of values to test
+n=4 ;%number of values to test
 func_actual= 3*(x^3)+4*(x^2)+2*x+1; %actual function
 x_input=linspace(a,b,n);
 y_input=zeros(size(x_input)); %placeholder
@@ -23,6 +23,7 @@ plot(x_input,y_input,'or') % plot data points that I based interpolation off of
 fplot(func_actual, [minx maxx]) %plot the real polynomial
 xlim([minx maxx]);
 title('Problem part D1, Lagrange polynomial interpolation versus actual function')
+legend('Lagrange polynomial interpolation function','Training data points','Real function')
 hold off;
 
 %calculate error

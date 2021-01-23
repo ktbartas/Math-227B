@@ -23,7 +23,7 @@ plot(x_input,y_input,'or') % plot data points that I based interpolation off of
 fplot(func_actual, [minx maxx]) %plot the real polynomial
 xlim([minx maxx]);
 title('Problem part D1, Lagrange polynomial interpolation versus actual function')
-legend('interpolating function','points used to interpolate','actual function')
+legend('Lagrange polynomial interpolation function','Training data points','Real function')
 hold off;
 
 %calculate error
