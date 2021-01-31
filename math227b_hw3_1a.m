@@ -1,9 +1,6 @@
 clear all; close all; clc;
 % 1/30/21 MATH227B HW#3 w/professor Qing Nie
-%part a, b
-
-%unknown one is x
-%unknown two is y
+%part a
 syms x y  % declare the system
 eq1= x+y^3-2  ;   %put in first equation
 eq2= x^3-y  ; %put in second equation
@@ -14,9 +11,6 @@ num_it=10  ;     %set how many iterations you want
 solution=newt_method(eq1,eq2,guesx,guesy,num_it)
 double(solution) %view solution as decimal
 %problem: my method only finds one solution
-%if there are two solutions, it will only return 
-%the solution that is closer to the initial guess
-
 %test - check my answer with matlab solve function answers
 test1=eq1==0;
 test2=eq2==0;
