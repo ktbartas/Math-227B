@@ -1,76 +1,39 @@
 clear all; close all; clc;
 % 1/30/21 MATH227B HW#3 w/professor Qing Nie
 %part c
-
-%unknown one is x
-%unknown two is y
 syms x y      % declare the system
 eq1=sin(2*x)-y*x;   %put in first equation
 eq2=(x-2)^3-y-5;  %put in second equation
 guesx=100 ;      %take a guess for x
-guesy=90 ;     %take a guess for y
-num_it=10;     %set how many iterations you want 
-
-solution=zeros(2,num_it)
+guesy=100 ;     %take a guess for y
+num_it=20;     %set how many iterations you want 
+solution=zeros(2,num_it);
 for k=1:num_it
-solution(:,k)=newt_method(eq1,eq2,guesx,guesy,k)
+solution(:,k)=newt_method(eq1,eq2,guesx,guesy,k);
 end
 double(solution)
-%problem: my method only finds one solution
-%if there are two solutions, it will only return 
-%the solution that is closer to the initial guess
-
-%test - check my answer with matlab solve function answers
-test1=eq1==0;
-test2=eq2==0;
-testsol=vpasolve([test1,test2],[x y]);
-actx=testsol.x(end,1)
-acty=testsol.y(end,1)
-
-%calculate square of error and compare
-xnewts=solution(1,:);
-ynewts=solution(2,:);
-xerrs=abs(xnewts-actx);
-xerrsquare=xerrs.^2;
-xerrtoplot=xerrs(2:end)./xerrsquare(1:end-1);
-yerrs=abs(ynewts-acty);
-yerrsquare=yerrs.^2;
-yerrtoplot=yerrs(2:end)./yerrsquare(1:end-1);
+%calc real answer
+actx=3.7378610792717002813768378229747698088083398423079400885065331;
+acty=0.2486204824288995168280048956051209120739412395093968992070134729;
+actsol=[actx ;acty];
+error=zeros(1,num_it);
+for k=1:num_it
+solution1=solution(:,k);
+error(:,k)=norm(solution1-actsol);
+end
+error
 xaxis=2:num_it;
-
-%this part is where there's a mistake?
-xkn1=log(xerrs(1:end-1));
-xknplus1=log(xerrs(2:end));
-px=xknplus1./xkn1
-ykn1=log(yerrs(1:end-1));
-yknplus1=log(yerrs(2:end));
-py=yknplus1./ykn1
-%plot
+erkn1=log(error(1:end-1));
+erknplus1=log(error(2:end));
+px=abs(erknplus1./erkn1)
 figure(1)
-plot(xaxis,xerrtoplot)
-%xlim([2 10])
-%ylim([0 0.001])
-title('Problem part c, Example 1, x-values')
-xlabel('Iteration (guess #)') 
-ylabel('c') 
-figure(2)
-plot(xaxis,yerrtoplot)
-%xlim([2 10])
-%ylim([0 0.8])
-title('Problem part c, Example 1, y-values')
-xlabel('Iteration (guess #)') 
-ylabel('c') 
-figure(3)
 plot(xaxis,px)
-hold on
 %xlim([2 10])
 ylim([0 3])
-plot(xaxis,py,'LineStyle','--')
-title('Problem part c, Example 1, x-values and y-values')
-xlabel('Iteration (guess #)') 
+title('Problem part c, Example 1, P converges to 2')
+xlabel('Iteration') 
 ylabel('P') 
-legend('P-value for x','P-value for y')
-hold off
+
 
 %function takes 5 inputs:
 %1) e1=equation 1
@@ -91,8 +54,8 @@ function x_n = newt_method(e1,e2,guessx,guessy,iter)
     for i=1:iter
         j=1;
         while j<i
-            in1=double(result(1,1)); %convert to double because it so slow
-            in2=double(result(2,1));
+            in1=vpa(result(1,1),64) ;%convert to double because it so slow
+            in2=vpa(result(2,1),64);
             injmatii=subs(invjmat,[x,y],[in1,in2]);
             temp1=subs(e1,[x,y],[in1,in2]);
             temp2=subs(e2,[x,y],[in1,in2]);
