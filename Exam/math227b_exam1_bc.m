@@ -52,8 +52,9 @@ title('y_1 and y_2 over time');hold off
 function ans = temp_scheme(fun1,fun2,tmin,tmax,init_cond,h)
 steps=(tmax-tmin)/h;
 t_vals=tmin:h:tmax;
+siz=length(t_vals);
 syms y1 y2 t %define system
-Y=zeros(2,steps+1); %make placeholder array
+Y=zeros(2,siz); %make placeholder array
 Y(1,1)=init_cond(1,1); %assign init cond y1
 Y(2,1)=init_cond(1,2); %assign init cond y2
 for i=1   %Euler's method for 1st step
