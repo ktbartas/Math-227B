@@ -1,6 +1,6 @@
 clear all; close all; clc;
-% 2/3/21 MATH227B Exam w/professor Qing Nie
-%part b- equations and init conditions, t range, h
+% 2/10/21 MATH227B Exam w/professor Qing Nie
+%part c- equations and init conditions, t range, h
 cond1 =52.59; %y1(0) 
 cond2 =83.82; %y2(0) 
 Tmin=0;%min t
@@ -42,17 +42,6 @@ for h_val =1:10
     bad_points(:,h_val)=yone'; 
     bad_points(:,h_val+10)=ytwo';
 end
-
-%real solutions for varying h
-for h_val =1:10
-    tempTmax=10^-h_val;
-    h_v=2*10^-(h_val+1); %temp h
-    tempt_vals=Tmin:h_v:tempTmax;
-    yone=subs(uSol,t,tempt_vals); %y1
-    ytwo=subs(vSol,t,tempt_vals); %y2
-    true_points2(:,h_val)=yone'; 
-    true_points2(:,h_val+10)=ytwo';
-end
 %calculate error
 norm_error=zeros(1,10);
 for i=1:10
@@ -61,7 +50,6 @@ for i=1:10
     norm_error(i)=mean(abs(double(norm(est_point-true_point))));
 end
 norm_error
-
 hes=[10^-1 10^-2 10^-3 10^-4 10^-5 10^-6 10^-7 10^-8 10^-9 10^-10]; %h values used
 %plot h on x-axis and error on y-axis
 figure(1); 
@@ -70,16 +58,13 @@ plot(hes,norm_error)
 set(gca, 'XScale', 'log', 'YScale', 'log');
 hold on;
 syms h
-fplot(h^3,[10^-10 10^-1],'--')
-fplot(h^2,[10^-10 10^-1],'--')
+fplot(10000*h^3,[10^-10 10^-1],'--')
+fplot(100*h^2,[10^-10 10^-1],'--')
 fplot(h^1,[10^-10 10^-1],'--')
-%fplot(vSol,[Tmin Tmax])
-%plot estimated solution 
-%plot(est_t,y1_est,'--') % y_1 est (AM)
-%plot(est_t,y2_est,'--') % y_2 est (AM)
 legend('error','h^3','h^2','h')
 ylabel('error')
 xlabel('h')
+xlim([10^-6 10^-2])
 title('error as h varies'); hold off;
 
 function ans = temp_scheme(fun1,fun2,tmin,tmax,init_cond,h)
@@ -90,14 +75,14 @@ syms y1 y2 t %define system
 Y=zeros(2,siz); %make placeholder array
 Y(1,1)=init_cond(1,1); %assign init cond y1
 Y(2,1)=init_cond(1,2); %assign init cond y2
-for i=1   %Euler's method for 1st step
-    in1=Y(1,1);
-    in2=Y(2,1);
-    temp1=subs(fun1,[y1,y2],[in1,in2]);
-    temp2=subs(fun2,[y1,y2],[in1,in2]);
-    Y(1,i+1)=in1+h*temp1;
-    Y(2,i+1)=in2+h*temp2;
-end %need this for 2nd step for temporal scheme
+for i=1   %not Euler's method for 1st step
+    t1=t_vals(2);
+    t2=t_vals(2);
+    temp1=subs(- exp(t*(2*5551^(1/2) - 153))*(5551^(1/2)/50 + 37/25)*((13743*5551^(1/2))/42700 - 4191/100) - (3*5551^(1/2)*exp(-t*(2*5551^(1/2) + 153))*(5551^(1/2)/50 - 37/25)*(1397*5551^(1/2) + 59553))/555100,[t],[t1]);
+    temp2=subs((3*5551^(1/2)*exp(-t*(2*5551^(1/2) + 153))*(1397*5551^(1/2) + 59553))/555100 - exp(t*(2*5551^(1/2) - 153))*((13743*5551^(1/2))/42700 - 4191/100),[t],[t2]);
+    Y(1,i+1)=temp1;
+    Y(2,i+1)=temp2;
+end %need more precise guess
 for i=2:steps
     in1=double(Y(1,i)); %y_n for y1
     in2=double(Y(2,i)); %y_n for y2

@@ -9,10 +9,6 @@ Tmin=0;%min t
 Tmax=10^-2;%max t
 h=10^-5; %step size
 t_vals=Tmin:h:Tmax;
-% 'real' solution using ode45
-[exact_t, exact_y] = ode45(@(t,b)[eq1(b(1),b(2));eq2(b(1),b(2))], [Tmin,Tmax], [cond1,cond2] );
-y1_exact=exact_y(:,1);
-y2_exact=exact_y(:,2);
 % 'real' solution using Dsolve
 syms u(t) v(t)
 ode1 = diff(u) == -5*u + 3*v; %u is y1
@@ -37,8 +33,6 @@ y2_est=est_sol(:,3) ;
 
 %plot real solution
 figure(1); hold on;
-%plot(exact_t,y1_exact) % y_1 exact (ode45)
-%plot(exact_t,y2_exact) % y_1 exact (ode45)
 fplot(uSol,[Tmin Tmax])
 fplot(vSol,[Tmin Tmax])
 %plot estimated solution 
@@ -47,7 +41,7 @@ plot(est_t,y2_est,'--') % y_2 est (AM)
 legend('y_1 exact','y_2 exact','y_1 estimate','y_2 estimate')
 ylabel('y_1 and y_2')
 xlabel('t')
-title('y_1 and y_2 over time');hold off
+title('y_1 and y_2 solutions using the temporal scheme compared to real solutions');hold off
 
 function ans = temp_scheme(fun1,fun2,tmin,tmax,init_cond,h)
 steps=(tmax-tmin)/h;
