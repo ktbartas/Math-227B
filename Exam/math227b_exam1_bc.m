@@ -7,7 +7,7 @@ eq1 =@(y1,y2) -5*y1 + 3*y2   ;
 eq2 =@(y1,y2) 100*y1 - 301*y2  ;
 Tmin=0;%min t
 Tmax=10^-2;%max t
-h=10^-4; %step size
+h=10^-5; %step size
 t_vals=Tmin:h:Tmax;
 % 'real' solution using ode45
 [exact_t, exact_y] = ode45(@(t,b)[eq1(b(1),b(2));eq2(b(1),b(2))], [Tmin,Tmax], [cond1,cond2] );
@@ -76,8 +76,10 @@ for i=2:steps
     temp4=subs(fun2,[y1,y2],[in3,in4]); %f(yn-1 2)
     fakeY1=in1+(h/2)*(3*temp1-temp3);
     fakeY2=in2+(h/2)*(3*temp2-temp4);
-    Y(1,i+1)=in1+(h/2)*(temp1+fakeY1);
-    Y(2,i+1)=in2+(h/2)*(temp2+fakeY2);
+    fakestar1=subs(fun1,[y1,y2],[fakeY1,fakeY2]);
+    fakestar2=subs(fun2,[y1,y2],[fakeY1,fakeY2]); 
+    Y(1,i+1)=in1+(h/2)*(temp1+fakestar1);
+    Y(2,i+1)=in2+(h/2)*(temp2+fakestar2);
 end
 ans=[t_vals' Y'];
 end
